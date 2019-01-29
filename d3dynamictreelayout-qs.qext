@@ -1,0 +1,12 @@
+{
+	"name": "JeffersonFamilyTreeExtension",
+	"description": "An extension to represent an hierarchical tree, using D3",
+	"type": "visualization",
+	"version": "2.1",
+	"icon": "extension",
+	"license": "The MIT License (MIT)",
+	"repository": "",
+	"dependencies": {
+		"qlik-sense": ">=February 2018"
+	}
+}
