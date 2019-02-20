@@ -50,6 +50,7 @@ define( [], function () {
 						//ref: "qListObjectDef.qDef.qFieldDefs.0",
 						label: "Node Name",
 						type: "string",
+						component: "expression",
 						expression: ""
 					},
 					depth: {
@@ -57,6 +58,7 @@ define( [], function () {
 						//ref: "qListObjectDef.qDef.qFieldDefs.0",
 						label: "Node Depth",
 						type: "string",
+						component: "expression",
 						expression: ""
 					},//treeConfiguration.items.treeStructure.items.depth
 					depthSort: {
@@ -77,12 +79,14 @@ define( [], function () {
 						ref: "properties.treeStructure.nodeID",
 						label: "Node ID",
 						type: "string",
+						component: "expression",
 						expression: ""
 					},//treeConfiguration.items.treeStructure.items.nodeID
 					parentNodeID: {
 						ref: "properties.treeStructure.parentNodeID",
 						label: "Parent Node ID",
 						type: "string",
+						component: "expression",
 						expression: ""
 					},//treeConfiguration.items.treeStructure.items.parentNodeID
 					defineCollapseLevel: {

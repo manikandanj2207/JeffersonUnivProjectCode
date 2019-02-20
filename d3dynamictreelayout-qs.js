@@ -309,7 +309,16 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 	    d.children = d._children;
 	    d._children = null;
 	  }
+	  if (d.parent) {
+		d.parent.children.forEach(function(element) {
+		  if (d !== element) {
+			toggleAll(element);
+		  }
+		});
+	  }
+	  update(d);
 	}
+	console.log("toggle function");
 
 	//check tree orientation from properties
 	var tree_orientation = "Horizontal";
@@ -399,7 +408,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 				    });
 				
 				nodeEnter.append("svg:text")
-				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -15 : 15) : (d.children || d._children ? 15 : -15) : (d.children || d._children ? 0 : 0);	})
+				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -12 : 12) : (d.children || d._children ? 12 : -12) : (d.children || d._children ? 0 : 0);	})
 				  .attr("dy", tree_orientation=="Horizontal" ? ".35em" : "1.85em")
 				  .attr("text-anchor", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? "end" : "start") : (d.children || d._children ? "start" : "end") : ( d.children || d._children ? "middle" : "middle"); })
 				  .text(function(d) { return d.name })
@@ -850,7 +859,9 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 
 		  	function toggleAll(d) {
 			    if (d.children) {
-			      	d.children.forEach(toggleAll);
+					d._children = d.children;
+					  d._children.forEach(toggleAll);
+					  d.children = null;
 			      	if(treeProperties.treeLayout.typeOfLeaf=="Rectangle" && treeProperties.treeStructure.defineCollapseLevel && d.depth+1>=treeProperties.treeStructure.collapseLevel){
 			      		toggle(d);
 			      	}
@@ -858,8 +869,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 			      		toggle(d);
 			      	}
 			    }
-			}
-
+			}			 
 			if(!root.children){
 				update(root);
 			}
@@ -868,6 +878,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 			
 			update(root);
 }
+console.log("toggle function");
 
 var app;
 var max_title_width = 0;
