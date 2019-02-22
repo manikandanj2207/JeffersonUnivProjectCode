@@ -53,8 +53,6 @@ function ( qlik, extension_properties, d3 ) {
 				}
 
 				var nodeDepth= ((treeProperties.treeStructure.nodeDepth));
-				//console.log("depth "+ nodeDepth);
-
 				if(!treeProperties.treeLayout.leaf.activateDynamicColors){ //static colors
 					if(treeProperties.treeMeasure.activateManualMeasure){
 
@@ -165,7 +163,7 @@ function launchTree(treeData, element, object_id, treeProperties){
 			load_tree = false;
 		}
 	}
-	if(isNaN(maxDepth)) //thanks to Lee Matthews (http://branch.qlik.com/#!/user/56728f52d1e497241ae69ac4) to point it out
+	if(isNaN(maxDepth))
 		load_tree = false;
 
 	if(isNaN(maxDepth) && !isNaN(maxDepthExpected)) //specifying expected max depth. If nodes are missing comment
@@ -181,8 +179,6 @@ function launchTree(treeData, element, object_id, treeProperties){
 			for(row_nr=0;row_nr<treeData.qHyperCube.qSize.qcy;row_nr++){ //iterating rows to create the tree
 				if(treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][0].qText==tree_depth){
 					if(!treeProperties.treeLayout.leaf.activateDynamicColors){ //static colors
-					//	console.log("MAX DEPTH :" + (Number(treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][0].qText)+1));
-	
 						var child = new node(node_id+iterator,
 											 treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][1].qText, //element_id
 											 treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][2].qText, //parent_id
@@ -193,7 +189,8 @@ function launchTree(treeData, element, object_id, treeProperties){
 
 						unordered_leafs.push(child);
 						iterator++;
-					}else{//dynamic colors
+					}
+					else{//dynamic colors
 						var child = new node(node_id+iterator,
 											 treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][1].qText, //element_id
 											 treeData.qHyperCube.qDataPages[0].qMatrix[row_nr][2].qText, //parent_id
@@ -212,8 +209,6 @@ function launchTree(treeData, element, object_id, treeProperties){
 				}
 			}			
 		}
-
-		//console.log("Unordered : "+ JSON.stringify(unordered_leafs));
 		var tree = growTree(unordered_leafs, maxDepth, minDepth);
 
 		if(!treeProperties.treeLayout.leaf.activateDynamicColors){
@@ -294,12 +289,6 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 		i = 0,
 		root;
 
-	//pre v3.2	
-	// var	width = element.context.clientWidth - margin.left - margin.right,
-	// 	height = element.context.clientHeight - margin.top - margin.bottom,
-	// 	i = 0,
-	// 	root;
-
 	// Toggle children.
 	function toggle(d) {
 	  if (d.children) {
@@ -318,8 +307,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 	  }
 	  update(d);
 	}
-	console.log("toggle function");
-
+	
 	//check tree orientation from properties
 	var tree_orientation = "Horizontal";
 	if(treeProperties.treeLayout.orientation=="Vertical_tb"||treeProperties.treeLayout.orientation=="Vertical_bt")
@@ -408,7 +396,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 				    });
 				
 				nodeEnter.append("svg:text")
-				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -12 : 12) : (d.children || d._children ? 12 : -12) : (d.children || d._children ? 0 : 0);	})
+				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -10 : 15) : (d.children || d._children ? 15 : -15) : (d.children || d._children ? 0 : 0);	})
 				  .attr("dy", tree_orientation=="Horizontal" ? ".35em" : "1.85em")
 				  .attr("text-anchor", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? "end" : "start") : (d.children || d._children ? "start" : "end") : ( d.children || d._children ? "middle" : "middle"); })
 				  .text(function(d) { return d.name })
@@ -878,7 +866,6 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 			
 			update(root);
 }
-console.log("toggle function");
 
 var app;
 var max_title_width = 0;
@@ -936,7 +923,6 @@ function nodeJsonReady(node){
 
 //returns a full tree based on an array of leafs and the tree's maximum depth
 function growTree(leafs, max_depth, min_depth){
-	//console.log("Grow tree Entered");
 	var tree = [];
 	var tree = sameLevelLeafs(leafs,max_depth);
 	if(max_depth>min_depth)
@@ -953,15 +939,12 @@ function growTree(leafs, max_depth, min_depth){
 		temp2=sameLevelLeafs(leafs,time_left_to_grow-2)
 	}
 
-	//console.log("Temp2 : "+temp2);
 	tree=nodeJsonReady(tree[0]);
-	//console.log("TREE :"+ tree);
 	return tree;
 }
 
 //returns a full tree JSON formated for D3 Tree based on an array of leafs and the tree's maximum depth
 function growJSONTree(tree){
-	//console.log("i'm in");
 }
 
 //returns an array will all the leafs that are at the same level as 'depth'
