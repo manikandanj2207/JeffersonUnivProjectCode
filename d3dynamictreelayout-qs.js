@@ -314,7 +314,26 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 		tree_orientation = "Vertical";
 
 	function update(source) {
-		var duration = d3.event && d3.event.altKey ? 5000 : 300;
+		var duration = d3.event && d3.event.altKey ? 5000 : 500;
+
+		
+  // compute the new height
+  var levelWidth = [1];
+  var childCount = function(level, n) {
+    
+    if(n.children && n.children.length > 0) {
+      if(levelWidth.length <= level + 1) levelWidth.push(0);
+      
+      levelWidth[level+1] += n.children.length;
+      n.children.forEach(function(d) {
+        childCount(level + 1, d);
+      });
+    }
+  };
+  childCount(0, root);  
+  var newHeight = d3.max(levelWidth) * 30;
+  tree = tree.size([newHeight, width]);
+    
 
 		// Compute the new tree layout.
 		var nodes = tree.nodes(root).reverse();
@@ -396,7 +415,7 @@ function renderChart(planted_tree, element, object_id, treeProperties) {
 				    });
 				
 				nodeEnter.append("svg:text")
-				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -10 : 15) : (d.children || d._children ? 15 : -15) : (d.children || d._children ? 0 : 0);	})
+				  .attr("x", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? -15 : 15) : (d.children || d._children ? 15 : -15) : (d.children || d._children ? 0 : 0);	})
 				  .attr("dy", tree_orientation=="Horizontal" ? ".35em" : "1.85em")
 				  .attr("text-anchor", function(d) { return tree_orientation=="Horizontal" ? treeProperties.treeLayout.orientation=="Horizontal_lr" ? (d.children || d._children ? "end" : "start") : (d.children || d._children ? "start" : "end") : ( d.children || d._children ? "middle" : "middle"); })
 				  .text(function(d) { return d.name })
